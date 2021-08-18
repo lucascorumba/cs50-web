@@ -1,4 +1,4 @@
-# CS50w hands-on project - Project 1: Wiki
+# Project 1: Wiki
 
 ## Description
 This project is one of six needed for approval on the [CS50 Web Programming](https://cs50.harvard.edu/web/2020/) course.
