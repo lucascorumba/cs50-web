@@ -1,4 +1,4 @@
-# CS50w hands-on project - Project 2: Commerce
+# Project 2: Commerce
 
 ## Description
 This project is one of six needed for approval on the [CS50 Web Programming](https://cs50.harvard.edu/web/2020/) course.
