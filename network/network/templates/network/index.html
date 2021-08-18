@@ -1,0 +1,93 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+{% if user.is_authenticated and home is True %}
+    <div id="new-post" class="box">
+        <h3>New Post</h3>
+        <form action="{% url 'index' %}" method="post">
+            {{ form }}
+            <input class="new-post-button btn btn-sm btn-outline-primary" type="submit" value="Post">
+        </form>
+    </div> 
+{% endif %}
+<div id="roster">
+    {% for post in posts %}
+        <div id="post-{{ post.id }}" class="box">
+            <div class="post-header">
+                <h5 style="float:left;"></h5><a href="{% url 'profile' post.author.id 1 %}"><b>{{ post.author }}</b></a></h5>
+                {% if user.id == post.author.id %}
+                    <a class="btn btn-sm btn-outline-primary" href="#" onclick="getPost('{{post.id}}')">Edit</a>
+                    <div style="display: none;" id="edit-form-{{post.id}}">
+                        <input id="edit-form-body-{{post.id}}" class="form-title form-control" name="change" type="text" 
+                        placeholder="Post...">
+                        <button class="btn btn-sm btn-outline-primary new-post-button" onclick="saveEdit('{{post.id}}')">Change Post</button>
+                    </div>
+                {% endif %}
+            </div>
+            <p id="post-body-{{post.id}}">{{ post.body }}</p>
+            <p class="text-muted profile-row">{{ post.time }}</p>
+            {% if user.is_authenticated %}
+                {% if post.id in like %}
+                    <div class="like-button-div">
+                        <input type="hidden" class="like-input" id="input-{{post.id}}-{{request.user.id}}" value="1,{{post.id}},{{request.user.id}}">
+                        <img id="like-button-{{post.id}}-{{request.user.id}}" class="like-button" onmouseover="changeCursor(true)" onmouseout="changeCursor(false)" 
+                        value="1" src="https://img.icons8.com/fluent/48/000000/hearts.png" width="30" height="30"/><span 
+                        id="like-count-{{post.id}}-{{request.user.id}}">{{ post.likes }}</span>
+                    </div>  
+                {% else %}
+                    <div class="like-button-div">
+                        <input type="hidden" class="like-input" id="input-{{post.id}}-{{request.user.id}}" value="0,{{post.id}},{{request.user.id}}">
+                        <img id="like-button-{{post.id}}-{{request.user.id}}" class="like-button" onmouseover="changeCursor(true)" onmouseout="changeCursor(false)" 
+                        value="0" src="https://img.icons8.com/windows/32/000000/like.png" width="30" height="30"/><span 
+                        id="like-count-{{post.id}}-{{request.user.id}}">{{ post.likes }}</span>
+                    </div>
+                {% endif %}
+            {% else %}
+             <br>
+            {% endif %}
+        </div>
+    {% endfor %} 
+</div>
+
+<div id="paginator" class="paginator">
+    <nav>
+        <ul class="pagination paginator">
+            {% if navigate.previous == True %}
+                <li class="page-item">
+                    {% if following == True %}
+                        <a class="page-link" href="/following/{{navigate.page_minus}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    {% else %}                       
+                        <a class="page-link" href="/{{navigate.page_minus}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    {% endif %}
+                </li>
+            {% endif %}
+            {% for page in pagination %}
+                {% if navigate.previous == False and navigate.next == False %}
+                {% elif following == True %}
+                <li class="page-item"><a class="page-link" href="/following/{{page}}">{{ page }}</a></li>
+                {% else %}                    
+                    <li class="page-item"><a class="page-link" href="/{{page}}">{{ page }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if navigate.next == True %}
+                <li class="page-item">
+                {% if following == True %}                    
+                    <a class="page-link" href="/following/{{navigate.page_plus}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    </a>          
+                {% else %}                    
+                    <a class="page-link" href="/{{navigate.page_plus}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    </a>        
+                {% endif %}
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}

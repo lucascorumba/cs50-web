@@ -1,0 +1,95 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block head %}
+    <script src="{% static 'network/profile.js' %}" defer></script>
+{% endblock %}
+
+{% block body %}
+<div class="profile-header">
+    <div class="profile-row">
+        <h1 class="profile-name">{{ profile.username }}</h1>
+        {% if profile.id != request.user.id and user.is_authenticated %}
+            <div class="profile-button">
+                <form id="follow-form">
+                    <input type="hidden" id="operation" value="{{is_follower}}">
+                    <input type="hidden" id="profile" value="{{profile.id}}">
+                    <input type="hidden" id="current-user" value="{{request.user.id}}">
+                    {% if is_follower == 0 %}
+                        <input class="btn btn-sm btn-outline-primary" type="button" id="follow-button" name="follow-button" value="Follow">
+                    {% else %}
+                        <input class="btn btn-sm btn-outline-primary" type="button" id="follow-button" name="follow-button" value="Unfollow">
+                    {% endif %}
+                </form>
+            </div>
+        {% endif %}
+    </div>
+    <div class="profile-data">
+        <h5>Followers: <span id="followers">{{ followers }}</span></h5>
+        <h5>Following: {{ following }}</h5>
+    </div>
+</div>
+<div id="roster">
+    {% for post in posts %}
+        <div id="post-{{ post.id }}" class="box">
+            <div class="post-header">
+                <p id="post-body-{{post.id}}">{{ post.body }}</p>
+                {% if profile.username == request.user.username %}
+                    <a class="btn btn-sm btn-outline-primary" href="#" onclick="getPost('{{post.id}}')">Edit</a>
+                    <div style="display: none;" id="edit-form-{{post.id}}">
+                        <input id="edit-form-body-{{post.id}}" class="form-title form-control" name="change" type="text" 
+                        placeholder="Post...">
+                        <button class="btn btn-sm btn-outline-primary new-post-button" onclick="saveEdit('{{post.id}}')">Change Post</button>
+                    </div>
+                {% endif %}
+            </div>
+            <p class="text-muted profile-row">{{ post.time }}</p>
+            {% if user.is_authenticated %}
+                {% if post.id in like %}
+                    <div class="like-button-div">
+                        <input type="hidden" class="like-input" id="input-{{post.id}}-{{request.user.id}}" value="1,{{post.id}},{{request.user.id}}">
+                        <img id="like-button-{{post.id}}-{{request.user.id}}" class="like-button" onmouseover="changeCursor(true)" onmouseout="changeCursor(false)" 
+                        value="1" src="https://img.icons8.com/fluent/48/000000/hearts.png" width="30" height="30"/><span 
+                        id="like-count-{{post.id}}-{{request.user.id}}">{{ post.likes }}</span>
+                    </div>  
+                {% else %}
+                    <div class="like-button-div">
+                        <input type="hidden" class="like-input" id="input-{{post.id}}-{{request.user.id}}" value="0,{{post.id}},{{request.user.id}}">
+                        <img id="like-button-{{post.id}}-{{request.user.id}}" class="like-button" onmouseover="changeCursor(true)" onmouseout="changeCursor(false)" 
+                        value="0" src="https://img.icons8.com/windows/32/000000/like.png" width="30" height="30"/><span 
+                        id="like-count-{{post.id}}-{{request.user.id}}">{{ post.likes }}</span>
+                    </div>
+                {% endif %}
+            {% else %} 
+            <br>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+<div id="paginator" class="paginator">
+    <nav>
+        <ul class="pagination">
+            {% if navigate.previous == True %}
+                <li class="page-item">
+                    <a class="page-link" href="/profile/{profile.id}}/{{navigate.page_minus}}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% for page in pagination %}
+                {% if navigate.previous == False and navigate.next == False %}
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="/profile/{{profile.id}}/{{page}}">{{ page }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if navigate.next == True %}
+                <li class="page-item">
+                    <a class="page-link" href="/profile/{{profile.id}}/{{navigate.page_plus}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+.box {
+    border: 2px solid rgb(100, 100, 100);
+    margin: 15px;
+    padding: 5px;
+    font-family: sans-serif;
+    border-radius: 10px;
+}
+
+.error-message {
+    color: red;
+}
+
+.post-header {
+    background-color: rgb(216, 216, 216);
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.profile-header {
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 90px;
+    padding: 5px;
+}
+
+.profile-name {   
+    float: left;
+}
+
+.profile-button {    
+    margin-bottom: 10px;
+}
+
+.profile-data {    
+    float: left;
+    border-radius: 10px;
+    border: 2px solid lightgrey;
+    padding: 5px;
+    background-color: rgb(216, 216, 216);
+    margin-left: 15px;
+    margin-top: 5px;
+}
+
+.profile-row {
+    float: left;
+    clear: left;
+}
+
+.new-post-button {
+    margin-top: 5px;
+}
+
+.paginator {
+    margin: auto;
+    width: 50%;
+    margin-bottom: 10px;
+}
+
+.like-button-div {
+    display: inline-block;
+}
