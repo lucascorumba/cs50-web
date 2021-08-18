@@ -1,0 +1,29 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% for item in watchlist %}
+    <div class="row" style="position:relative;">
+        <a href="{% url 'listing' item.wishlist.id %}"><span class="listing"></span></a>
+        <div class="col"> 
+            <img src="{{ item.wishlist.image }}" width="250" height="250">
+        </div>
+        <div class="col">
+            <h5><b>{{ item.wishlist.title }}</b></h5><br>
+            <p><b>Initial Price: </b>${{ item.wishlist.startingBid }}</p>
+            {% if not highestBids|get_item:item.wishlist.id %}
+                <p>Be the first to bid!</p>
+            {% else %}
+                <p><b>Highest Bid: </b>${{ highestBids|get_item:item.wishlist.id }}</p>
+            {% endif %}
+            <br>
+            <p class="text-muted">Created {{ item.wishlist.creationTime }}</p>
+        </div>
+        <div class="col">
+            <p>{{ item.wishlist.description }}</p>
+        </div>
+    </div>
+    <br><hr><br>
+{% empty %}
+    <h3>Watchlist Empty</h3>
+    {% endfor %}
+{% endblock %}

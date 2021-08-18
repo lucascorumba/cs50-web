@@ -1,0 +1,30 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>{{ title }}</h2>
+    {% for listing in listings %}
+        <div class="row" style="position:relative;">
+            <a href="{% url 'listing' listing.id %}"><span class="listing"></span></a>
+            <div class="col"> 
+                <img src="{{ listing.image }}" width="250" height="250">
+            </div>
+            <div class="col">
+                <h5><b>{{ listing.title }}</b></h5><br>
+                <p><b>Initial Price: </b>${{ listing.startingBid }}</p>
+                {% if not highestBids|get_item:listing.id %}
+                    <p>Be the first to make a bid!</p>
+                {% else %}
+                    <p><b>Highest Bid: </b>${{ highestBids|get_item:listing.id }}</p>
+                {% endif %}
+                <br>
+                <p class="text-muted">Created {{ listing.creationTime }}</p>
+            </div>
+            <div class="col">
+                <p>{{ listing.description }}</p>
+            </div>
+        </div>
+        <br><hr><br>
+    {% empty %}
+        <h3>No Listings</h3>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    {% if check %}
+        <h1>All Categories</h1>
+        {% for category in categories %}
+            <ul>
+                <li><a href="{% url 'category' category.0 %}">{{ category.1 }}</a></li>
+            </ul>
+        {% endfor %}
+    {% else %}
+        <h1>{{ h1 }}</h1>
+        {% for listing in listings %}
+            <div class="row" style="position:relative;">
+                <a href="{% url 'listing' listing.id %}"><span class="listing"></span></a>
+                <div class="col"> 
+                    <img src="{{ listing.image }}" width="250" height="250">
+                </div>
+                <div class="col">
+                    <h5><b>{{ listing.title }}</b></h5><br>
+                    <p><b>Initial Price: </b>{{ listing.startingBid }}</p>
+                    <p><b>Current Price: </b>{{ highestBids|get_item:listing.id }}</p>
+                    <br>
+                    <p class="text-muted">Created {{ listing.creationTime }}</p>
+                </div>
+                <div class="col">
+                    <p>{{ listing.description }}</p>
+                </div>
+            </div>
+            <br><hr><br>
+        {% endfor %}
+    {% endif %}
+    
+{% endblock %}

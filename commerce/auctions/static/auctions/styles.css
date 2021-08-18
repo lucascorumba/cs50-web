@@ -1,0 +1,70 @@
+body {
+    padding: 10px;
+}
+
+.listing {
+    position:absolute; 
+    width:100%;
+    height:100%;
+    top:0;
+    left: 0;
+
+    z-index: 1;
+}
+
+.listing-title {
+    margin:0; 
+    float:left; 
+    margin-top:5px;
+}
+
+.watchlist-button {
+    margin-left: 10%;
+}
+
+.textarea {
+    width: 70%;
+    height: 50px;
+    margin: 5px;
+    box-sizing: border-box;
+    resize: none;
+}
+
+.form-image {
+    width: 70%;
+    margin: 5px;
+}
+
+.form-title {
+    width: 30%;
+    margin: 5px;
+    float: left;
+}
+
+.form-bid {
+    width: 20%;
+    margin: 5px;
+    float: left;
+}
+
+.form-select {
+    margin: 5px;
+    width: 15%;
+}
+
+.form-button {
+    margin: 5px;
+    border-radius: 25px;
+}
+
+.auction-closed {
+    color: red;
+}
+
+.auction-won {
+    color: green;
+}
+
+.auction-info {
+    color: blue;
+}

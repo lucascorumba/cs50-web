@@ -1,0 +1,105 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+{% block body %}
+    <div class="row">
+        <div class="col">
+            <img src="{{ listing.image }}" width="250" height="250">
+        </div>
+        <div class="col">
+            {% if user.is_authenticated %}
+                <h5 class="listing-title"><b>{{ listing.title }}</b></h5>                
+                    <form action="{% url 'refresh' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="item" value="{{ listing.id }}">
+                        {% if isInWatch == False %}
+                        <input type="hidden" name="watchlistState" value="0">
+                            {% if isActive == False %}
+                            <input class="watchlist-button" type="submit" value="Add to Watchlist" disabled>
+                            {% else %}
+                            <input class="watchlist-button" type="submit" value="Add to Watchlist">
+                            {% endif %}
+                        {% else %}
+                        <input type="hidden" name="watchlistState" value="1">
+                        <input class="watchlist-button" type="submit" value="Remove from Watchlist">
+                        {% endif %}        
+                    </form>
+            {% else %}
+                <h5><b>{{ listing.title }}</b></h5>
+            {% endif %}
+            <br>
+            <p><b>Initial Price: </b>${{ listing.startingBid }}</p>
+                {% if not bids|get_item:listing.id %}
+                    <p>Be the first to make a bid!</p>
+                {% else %}
+                    <p><b>Highest Bid: </b>${{ bids|get_item:listing.id }}</p>
+                {% endif %}
+            {% if user.is_authenticated %}
+            <form action="{% url 'refresh' %}" method="post">
+                {% csrf_token %}
+                {{ bidForm }}
+                <input type="hidden" name="item" value="{{ listing.id }}">
+                {% if isActive == False %}
+                    <input type="submit" name="bidButton" value="Make Your Bid" disabled>
+                {% else %}
+                    <input type="submit" name="bidButton" value="Make Your Bid">
+                {% endif %}
+            </form> 
+            {% else %}
+            <a href="{% url 'login' %}">Log in to make a bid</a>
+            {% endif %}
+            <br>
+            <p class="text-muted">Created {{ listing.creationTime }}</p>
+        </div>
+        <div class="col">
+            <p>{{ listing.description }}</p>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-3">
+            <h4><b>Details</b></h4>
+            <ul>
+                <li><p>Created by: {{ listing.owner }}</p></li>
+                <li><p>Category: {{ listing.category }}</p></li>
+            </ul>
+            {% if isOwner %}
+            <form action="{% url 'refresh' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="item" value="{{ listing.id }}">
+                {% if isActive == True %}
+                <input type="submit" name="closeAuction" value="Close Auction">
+                {% else %}
+                <h4 class="auction-info">Auction closed<br>{{ winner }} is the winner!</h4>
+                {% endif %}
+            </form>
+            {% elif isActive == False and winner != user %}
+            <h4 class="auction-closed">Auction Closed</h4>
+            {% elif isActive == False and winner == user %}
+            <h4 class="auction-won">Auction Closed <br> <b>You are the winner!</b></h4>
+            {% endif %}
+        </div>
+        <div class="col-5">
+            <h5><b>Comments</b></h5>
+                {% for comment in comments %}
+                    <ul>
+                        <li>{{ comment.author }}: {{ comment.comment }}</li>
+                    </ul>
+                {% endfor %}
+        </div>
+        <div class="col-4">
+            {% if user.is_authenticated %}
+            <form action="{% url 'refresh' %}" method="post">
+                {% csrf_token %}
+                {{ commentForm }}<br>
+                <input type="hidden" name="item" value="{{ listing.id }}">
+                {% if isActive == False %}
+                <input type="submit" name="commentButton" value="Publish" disabled>
+                {% else %}
+                <input type="submit" name="commentButton" value="Publish">
+                {% endif %}
+            </form>
+            {% endif %}
+        </div>
+    </div>
+    
+{% endblock %}
