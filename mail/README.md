@@ -1,4 +1,4 @@
-# CS50w Hands-on Project - Project 3: Mail
+# Project 3: Mail
 
 ## Description
 This project is one of six needed for approval on the [CS50 Web Programming](https://cs50.harvard.edu/web/2020/) course.
