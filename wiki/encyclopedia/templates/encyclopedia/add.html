@@ -1,0 +1,15 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    New Page
+{% endblock %}
+
+{% block body %}
+    <h1>New page</h1>
+    <h4>Please enter the file's <b>title</b> and the Markdown <b>content</b> below:</h4>
+    <form action="{% url 'add' %}" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Add Entry">
+    </form>
+{% endblock %}

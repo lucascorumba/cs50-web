@@ -1,0 +1,13 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Something went wrong...
+{% endblock %}
+
+{% block body %}
+    <h1>Error</h1>
+    <h4>Sorry, it appears that something went wrong...</h4>
+    <br><br>
+    <h5>{{ error }}</h5>
+    {{log}}<br>{{log2}}
+{% endblock %}
